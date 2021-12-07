@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:gravity="center">
             <androidx.cardview.widget.CardView
+                android:layout_marginTop="20dp"
                 android:layout_width="380dp"
                 android:layout_height="507dp"
-                android:layout_marginTop="3dp"
                 app:cardElevation="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
