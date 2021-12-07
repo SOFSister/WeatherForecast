@@ -1,19 +1,27 @@
 package com.example.weatherforecast.ui.weather.today;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherforecast.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {//该适配器继承字RecyclerView的Adapter适配器，因其具有可以指定
+public class TxOtherCityAdapter extends RecyclerView.Adapter<TxOtherCityAdapter.ViewHolder> {//该适配器继承字RecyclerView的Adapter适配器，因其具有可以指定
     private List<Tx> mTxList;//用以将适配完的子项储存的链表，它的泛型是之前的实体类
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,7 +40,7 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {//该
         }
     }
 
-    public TxAdapter(List<Tx> txList) {
+    public TxOtherCityAdapter(List<Tx> txList) {
         //链表的赋值
         mTxList = txList;
     }
@@ -49,19 +57,46 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {//该
             //这里是子项的点击事件，RecyclerView的特点就是可以对子项里面单个控件注册监听，这也是为什么RecyclerView要摒弃ListView的setOnItemClickListener方法的原因
             @Override
             public void onClick(View v) {
-                //Tx tx = mTxList.get(holder.getAdapterPosition());
+                Tx tx = mTxList.get(holder.getAdapterPosition());
                 //Toast.makeText(v.getContext(), tx.getName(), Toast.LENGTH_LONG).show();
-                //mTxList.remove(tx);//所谓的删除就是将子项从链表中remove
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                View view = View.inflate(v.getContext(), R.layout.other_city_main, null);
+                List<Tx> txList = new ArrayList<>();
+                txList=initTxs();
+                RecyclerView recyclerView = view.findViewById(R.id.recycler);//找到RecyclerView控件
+                LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext());//布局管理器
+                recyclerView.setLayoutManager(layoutManager);
+                TxAdapter adapter = new TxAdapter(txList);//适配器对象
+                recyclerView.setAdapter(adapter);//设置适配器为上面的对象
+                //recyclerView.addItemDecoration(new DividerItemDecoration(v.getContext(),DividerItemDecoration.VERTICAL));
+                alertDialog
+                        .setTitle("详细信息 "+tx.getName())
+                        .setIcon(R.drawable.ic_main)
+                        .setView(view)
+                        .create();
+                alertDialog.show();
             }
         });
         return holder;//返回一个holder对象，给下个方法使用
     }
-
+    private List<Tx> initTxs(){
+        List<Tx> txList = new ArrayList<>();
+        Tx weather = new Tx("天气","晴", R.drawable.weather);
+        txList.add(weather);//加入到链表
+        Tx temperature = new Tx("温度","15/5°", R.drawable.temperature);
+        txList.add(temperature);//加入到链表
+        Tx calendar = new Tx("日期","2021/12/6", R.drawable.calendar);
+        txList.add(calendar);//加入到链表
+        Tx windDirection = new Tx("风向","西北风", R.drawable.winddirection);
+        txList.add(windDirection);//加入到链表
+        Tx windForce = new Tx("风速","3级", R.drawable.windforce);
+        txList.add(windForce);//加入到链表
+        return txList;
+    }
     @Override
-
     public void onBindViewHolder(ViewHolder holder, int position) {
         //用以将滚入屏幕的子项加载图片等的方法，两个参数
-       // A:前面方法ViewHolder的对象；
+        // A:前面方法ViewHolder的对象；
         //B:子项的id
         Tx tx = mTxList.get(position);//创建前面实体类的对象
         holder.txImage.setImageResource(tx.getImageId());
@@ -75,4 +110,3 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {//该
         return mTxList.size();
     }
 }
-

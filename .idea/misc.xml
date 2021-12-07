@@ -3,17 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/drawable/bg_edittext.xml" value="0.40370370370370373" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/drawable/bg_edittext_focused.xml" value="0.40370370370370373" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/drawable/bg_edittext_normal.xml" value="0.40370370370370373" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.4197916666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/bg_edittext.xml" value="0.3836050724637681" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/fragment_home.xml" value="0.13019250253292808" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/fragment_notifications.xml" value="0.13019250253292808" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/history_fragment.xml" value="0.14990942028985507" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/map_fragment.xml" value="0.2" />
-        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/recommend_fragment.xml" value="0.18070652173913043" />
-        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/setup_fragment.xml" value="0.14990942028985507" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/other_city_main.xml" value="0.19701086956521738" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/recommend_fragment.xml" value="0.264" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/setup_fragment.xml" value="0.4" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/today_weather_fragment.xml" value="0.264" />
-        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/today_weather_msg.xml" value="0.2" />
+        <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/today_weather_msg.xml" value="0.264" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/layout/weather_fragment.xml" value="0.14990942028985507" />
         <entry key="..\:/Android/AndroidStudioProjects/WeatherForecast/app/src/main/res/menu/bottom_nav_menu.xml" value="0.4036458333333333" />
       </map>

@@ -40,13 +40,13 @@ public class TodayWeatherFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         TxAdapter adapter = new TxAdapter(txList);//适配器对象
         recyclerView.setAdapter(adapter);//设置适配器为上面的对象
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         //其他城市
         otherCityList=initOtherCityTxs();
         RecyclerView recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
         LinearLayoutManager layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
         recyclerOtherCityView.setLayoutManager(layoutOtherCityManager);
-        TxAdapter adapterOtherCity = new TxAdapter(otherCityList);//适配器对象
+        TxOtherCityAdapter adapterOtherCity = new TxOtherCityAdapter(otherCityList);//适配器对象
         recyclerOtherCityView.setAdapter(adapterOtherCity);//设置适配器为上面的对象
         recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         return view;
@@ -60,21 +60,21 @@ public class TodayWeatherFragment extends Fragment {
     }
     private List<Tx> initTxs(){
         List<Tx> txList = new ArrayList<>();
-        Tx weather = new Tx("天气        晴", R.drawable.weather);
+        Tx weather = new Tx("天气","晴", R.drawable.weather);
         txList.add(weather);//加入到链表
-        Tx temperature = new Tx("温度        15/5°", R.drawable.temperature);
+        Tx temperature = new Tx("温度","15/5°", R.drawable.temperature);
         txList.add(temperature);//加入到链表
-        Tx calendar = new Tx("日期        2021/12/6", R.drawable.calendar);
+        Tx calendar = new Tx("日期","2021/12/6", R.drawable.calendar);
         txList.add(calendar);//加入到链表
-        Tx windDirection = new Tx("风向        西北风", R.drawable.winddirection);
+        Tx windDirection = new Tx("风向","西北风", R.drawable.winddirection);
         txList.add(windDirection);//加入到链表
-        Tx windForce = new Tx("风速        3级", R.drawable.windforce);
+        Tx windForce = new Tx("风速","3级", R.drawable.windforce);
         txList.add(windForce);//加入到链表
         return txList;
     }
     private List<Tx> initOtherCityTxs(){
         List<Tx> txList = new ArrayList<>();
-        Tx city = new Tx("北京        晴8/-5°", R.drawable.city);
+        Tx city = new Tx("北京","晴8/-5°", R.drawable.city);
         txList.add(city);//加入到链表
         return txList;
     }

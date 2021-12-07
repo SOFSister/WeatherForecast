@@ -17,12 +17,22 @@
     <TextView
 
         android:id="@+id/tx_name"
-        android:layout_width="300dp"
+        android:layout_width="130dp"
+        android:textSize="15dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:text="ceshixinxi" />
+    <TextView
+
+        android:id="@+id/tx_msg"
+        android:gravity="right"
+        android:layout_width="130dp"
         android:textSize="15dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="10dp"
         android:text="ceshixinxi" />
-
 
 </LinearLayout>

@@ -3,12 +3,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.weather.recommend.RecommendFragment">
-
-    <TextView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.weather.today.TodayWeatherFragment"
+    android:background="#CFEBF8">
+    <ScrollView
+        android:id="@+id/weather_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
-        android:text="recommend" />
+        android:scrollbars="none"
+        android:overScrollMode="never">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <androidx.cardview.widget.CardView
+                android:layout_width="380dp"
+                android:layout_height="507dp"
+                android:layout_marginTop="3dp"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="10dp"
+                android:layout_marginBottom="10dp"
+                android:alpha="0.8">
+                <TextView
+                    android:id="@+id/other_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#8DA1AA"
+                    android:textSize="18sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="生成二维码" />
 
+                <androidx.cardview.widget.CardView
+                    android:layout_width="360dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:cardCornerRadius="10dp"
+                    app:cardBackgroundColor="#CFEBF8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="键入二维码内容"
+                        android:textColor="#03A9F4"
+                        android:layout_margin="10dp"/>
+                    <EditText
+                        android:id="@+id/create_QRcode_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:padding="5dip"
+                        android:background="@drawable/bg_edittext"
+                        android:layout_margin="36dip"
+                        android:textColorHint="#AAAAAA"
+                        android:textSize="15dip"
+                        android:singleLine="true"
+                        android:hint="请输入..."
+                        android:text="www.hznu.edu.cn"/>
+                    <Button
+                        android:id="@+id/create_QRcode_btn"
+                        android:layout_marginTop="63dp"
+                        android:layout_marginLeft="130dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="生成">
+                    </Button>
+                </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/create_QRcode_Img"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="180dp"/>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="380dp"
+                android:layout_height="457dp"
+                android:layout_marginTop="3dp"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="10dp"
+                android:layout_marginBottom="100dp"
+                android:alpha="0.8">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#8DA1AA"
+                    android:textSize="18sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="生成每日一图" />
+                <Button
+                    android:id="@+id/photo_btn"
+                    android:layout_marginTop="63dp"
+                    android:layout_marginLeft="130dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拍摄"/>
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="130dp"/>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
