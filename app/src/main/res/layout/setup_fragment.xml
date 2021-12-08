@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.weather.today.TodayWeatherFragment"
-    android:background="#CFEBF8">
+    android:background="#CFEBF8"
+    tools:context=".ui.weather.today.TodayWeatherFragment">
+
     <ScrollView
         android:id="@+id/weather_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
+
             <androidx.cardview.widget.CardView
                 android:layout_width="380dp"
                 android:layout_height="180dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:alpha="0.8"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="10dp"
-                android:layout_marginBottom="10dp"
-                android:alpha="0.8">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#8DA1AA"
-                        android:textSize="18sp"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
-                        android:text="用户信息" />
+                        android:text="用户信息"
+                        android:textColor="#8DA1AA"
+                        android:textSize="18sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="30dp"
@@ -54,21 +60,27 @@
 
                         <TextView
                             android:layout_width="180dp"
-                            android:textSize="22dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_margin="10dp"
-                            android:textStyle="bold"
+                            android:text="ceshixinxi"
                             android:textColor="@color/black"
-                            android:text="ceshixinxi" />
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+
+
+                        <CheckBox
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="自动登录" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="30dp"
@@ -79,20 +91,21 @@
 
                         <EditText
                             android:layout_width="180dp"
-                            android:textSize="22dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_margin="10dp"
                             android:background="@drawable/bg_edittext"
-                            android:textColorHint="#AAAAAA"
                             android:singleLine="true"
-                            android:textStyle="bold"
-                            android:text="ceshixinxi" />
+                            android:text="ceshixinxi"
+                            android:textColorHint="#AAAAAA"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+
                         <Button
                             android:layout_width="100dp"
                             android:layout_height="40dp"
                             android:layout_marginTop="5dp"
-                            android:text="重置密码"/>
+                            android:text="重置密码" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -102,29 +115,32 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="380dp"
                 android:layout_height="150dp"
+                android:layout_marginBottom="10dp"
+                android:alpha="0.8"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="10dp"
-                android:layout_marginBottom="10dp"
-                android:alpha="0.8">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#8DA1AA"
-                        android:textSize="18sp"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
-                        android:text="默认位置" />
+                        android:text="默认位置"
+                        android:textColor="#8DA1AA"
+                        android:textSize="18sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="30dp"
@@ -134,58 +150,163 @@
                             android:scaleType="fitCenter" />
 
                         <TextView
+                            android:id="@+id/local_city_text"
                             android:layout_width="280dp"
-                            android:textSize="22dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_margin="10dp"
-                            android:textStyle="bold"
+                            android:text="浙江省杭州市余杭区"
                             android:textColor="@color/black"
-                            android:text="浙江省杭州市余杭区" />
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
+
                     <Button
+                        android:id="@+id/change_local_city"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginLeft="140dp"
-                        android:text="修改"/>
+                        android:text="修改" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="380dp"
-                android:layout_height="150dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="10dp"
+                android:alpha="0.8"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="10dp"
-                android:layout_marginBottom="10dp"
-                android:alpha="0.8">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#8DA1AA"
-                        android:textSize="18sp"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
-                        android:text="城市设置" />
+                        android:text="城市设置"
+                        android:textColor="#8DA1AA"
+                        android:textSize="18sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
+
                         <androidx.cardview.widget.CardView
                             android:layout_width="360dp"
-                            android:layout_height="50dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_height="300dp"
+                            app:cardBackgroundColor="#CFEBF8"
                             app:cardCornerRadius="10dp"
-                            app:cardBackgroundColor="#CFEBF8">
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:text="感兴趣的城市"
+                                android:textColor="#03A9F4" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/interested_city_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="7dp"
+                                android:layout_marginTop="30dp"
+                                android:layout_marginRight="7dp"></androidx.recyclerview.widget.RecyclerView>
                         </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="140dp"
+                        android:text="添加城市" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="380dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="100dp"
+                android:alpha="0.8"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:text="其他设置"
+                        android:textColor="#8DA1AA"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/number"
+                            android:scaleType="fitCenter" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="10dp"
+                            android:text="历史城市显示个数："
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+
+                            android:text="10"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="20dp"
+                            android:text="+1" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="-1" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

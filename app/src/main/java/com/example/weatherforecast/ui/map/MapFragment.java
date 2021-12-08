@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.example.weatherforecast.R;
+import com.example.weatherforecast.WeatherViewModel;
 
 public class MapFragment extends Fragment {
 
@@ -36,6 +38,7 @@ public class MapFragment extends Fragment {
     private LocationClient mLocationClient;
     private Boolean isFirstLocate=true;
     private MyLocationConfiguration.LocationMode locationMode;
+    private static String nowCity="";
     public static MapFragment newInstance() {
         return new MapFragment();
     }
@@ -129,8 +132,15 @@ public class MapFragment extends Fragment {
             stringBuilder.append("\n区：" + location.getDistrict());
             stringBuilder.append("\n街道：" + location.getStreet());
             stringBuilder.append("\n地址：" + location.getAddrStr());
-
             mtextView.setText(stringBuilder.toString());
+
+            Log.i("debug666","haha");
+            //更新当前城市
+            if(!nowCity.equals(location.getCity())){
+                nowCity=location.getCity();
+                WeatherViewModel weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
+                weatherViewModel.setCityEvent(location.getCity());
+            }
         }
     }
     @Override

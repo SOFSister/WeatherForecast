@@ -43,7 +43,7 @@
                     android:textSize="20sp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:text="杭州 7°C" />
+                    android:text=" 7°C" />
             </androidx.cardview.widget.CardView>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_margin="7dp"
