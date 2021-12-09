@@ -39,6 +39,7 @@ public class MapFragment extends Fragment {
     private Boolean isFirstLocate=true;
     private MyLocationConfiguration.LocationMode locationMode;
     private static String nowCity="";
+    private static String nowCityMsg="";
     public static MapFragment newInstance() {
         return new MapFragment();
     }
@@ -140,6 +141,11 @@ public class MapFragment extends Fragment {
                 nowCity=location.getCity();
                 WeatherViewModel weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
                 weatherViewModel.setCityEvent(location.getCity());
+            }
+            if(!nowCityMsg.equals(location.getProvince()+location.getCity()+location.getDistrict())){
+                nowCityMsg=location.getProvince()+location.getCity()+location.getDistrict();
+                WeatherViewModel weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
+                weatherViewModel.setCityMsgEvent(nowCityMsg);
             }
         }
     }

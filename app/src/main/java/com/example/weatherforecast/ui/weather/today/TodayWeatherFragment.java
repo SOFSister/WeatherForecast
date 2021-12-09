@@ -27,7 +27,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.weatherforecast.DB.AppDatabase;
+import com.example.weatherforecast.DB.InterestedCity;
 import com.example.weatherforecast.MainActivity;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.WeatherViewModel;
@@ -44,6 +47,7 @@ import java.util.List;
 public class TodayWeatherFragment extends Fragment {
     private static List<Tx> txList = new ArrayList<>();//一个全局的链表 详细天气
     private List<Tx> otherCityList = new ArrayList<>();//一个全局的链表 其他城市信息
+    private View view;
     private static RecyclerView recyclerView;
     private static TextView titleNowCity;
     private static LinearLayoutManager layoutManager;
@@ -78,10 +82,13 @@ public class TodayWeatherFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //初始化recyclerview
-        View view=inflater.inflate(R.layout.today_weather_fragment, container, false);
+        view=inflater.inflate(R.layout.today_weather_fragment, container, false);
         recyclerView = view.findViewById(R.id.recycler);//找到RecyclerView控件
         layoutManager = new LinearLayoutManager(getContext());//布局管理器
         //其他城市
+        List<InterestedCity> otherCities=selectCityData(view);
+
+
         otherCityList=initOtherCityTxs();
         RecyclerView recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
         LinearLayoutManager layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
@@ -93,14 +100,14 @@ public class TodayWeatherFragment extends Fragment {
         //初始化变量
         titleNowCity=view.findViewById(R.id.title_now_city);
 
-        //监听当前城市
+
         WeatherViewModel weatherViewModel = new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
+        //监听城市变化
         weatherViewModel.getCityEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 //查询天气
                 titleNowCity.setText(s);
-                Log.i("debug666","xxx");
                 QueryWeather.queryWeather(s);
             }
         });
@@ -136,5 +143,14 @@ public class TodayWeatherFragment extends Fragment {
         Tx city = new Tx("北京","晴8/-5°", R.drawable.city);
         txList.add(city);//加入到链表
         return txList;
+    }
+    /**
+     * 查询数据
+     * @param view
+     */
+    public List<InterestedCity> selectCityData(View view)
+    {
+        Toast.makeText(getContext(),"查询成功",Toast.LENGTH_SHORT).show();
+        return AppDatabase.getInstance().interestedCityDao().loadAll();
     }
 }
