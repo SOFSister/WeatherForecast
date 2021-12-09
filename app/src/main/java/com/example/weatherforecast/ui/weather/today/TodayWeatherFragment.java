@@ -86,16 +86,6 @@ public class TodayWeatherFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);//找到RecyclerView控件
         layoutManager = new LinearLayoutManager(getContext());//布局管理器
         //其他城市
-        List<InterestedCity> otherCities=selectCityData(view);
-
-
-        otherCityList=initOtherCityTxs();
-        RecyclerView recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
-        LinearLayoutManager layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
-        recyclerOtherCityView.setLayoutManager(layoutOtherCityManager);
-        TxOtherCityAdapter adapterOtherCity = new TxOtherCityAdapter(otherCityList);//适配器对象
-        recyclerOtherCityView.setAdapter(adapterOtherCity);//设置适配器为上面的对象
-        recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
         //初始化变量
         titleNowCity=view.findViewById(R.id.title_now_city);
@@ -109,6 +99,19 @@ public class TodayWeatherFragment extends Fragment {
                 //查询天气
                 titleNowCity.setText(s);
                 QueryWeather.queryWeather(s);
+            }
+        });
+        //监听感兴趣城市的变化
+        weatherViewModel.getInterestedCity().observe(getViewLifecycleOwner(), new Observer<List<InterestedCity>>() {
+            @Override
+            public void onChanged(@Nullable List<InterestedCity> s) {
+                otherCityList=initOtherCityTxs(s);
+                RecyclerView recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
+                LinearLayoutManager layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
+                recyclerOtherCityView.setLayoutManager(layoutOtherCityManager);
+                TxOtherCityAdapter adapterOtherCity = new TxOtherCityAdapter(otherCityList);//适配器对象
+                recyclerOtherCityView.setAdapter(adapterOtherCity);//设置适配器为上面的对象
+                recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
             }
         });
         return view;
@@ -138,19 +141,12 @@ public class TodayWeatherFragment extends Fragment {
         txList.add(windForce);//加入到链表
         return txList;
     }
-    private List<Tx> initOtherCityTxs(){
+    private List<Tx> initOtherCityTxs(List<InterestedCity> s){
         List<Tx> txList = new ArrayList<>();
-        Tx city = new Tx("北京","晴8/-5°", R.drawable.city);
-        txList.add(city);//加入到链表
+        for(InterestedCity perCity:s){
+            Tx city = new Tx(perCity.getInterestedCityName(),"晴8/-5°", R.drawable.city);
+            txList.add(city);//加入到链表
+        }
         return txList;
-    }
-    /**
-     * 查询数据
-     * @param view
-     */
-    public List<InterestedCity> selectCityData(View view)
-    {
-        Toast.makeText(getContext(),"查询成功",Toast.LENGTH_SHORT).show();
-        return AppDatabase.getInstance().interestedCityDao().loadAll();
     }
 }

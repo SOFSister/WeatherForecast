@@ -18,12 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weatherforecast.DB.AppDatabase;
 import com.example.weatherforecast.DB.InterestedCity;
 import com.example.weatherforecast.R;
+import com.example.weatherforecast.SPUtils;
 import com.example.weatherforecast.WeatherViewModel;
 import com.example.weatherforecast.queryWeather.QueryWeather;
 import com.example.weatherforecast.ui.setup.interestedcity.CityTx;
@@ -48,7 +51,15 @@ public class SetupFragment extends Fragment {
     private Button localCityBtn;
     private TextView localCityText;
     private Button addInterestedCity;
+    private TextView accountTv;
+    private EditText passwordEt;
+    private CheckBox autoLogin;
     private View view;
+    private SPUtils sp;
+    private TextView maxItemTv;
+    private Button itemAddBtn;
+    private Button itemReduceBtn;
+    private Button resetBtn;
 
     public static SetupFragment newInstance() {
         return new SetupFragment();
@@ -61,10 +72,20 @@ public class SetupFragment extends Fragment {
         addInterestedCity=view.findViewById(R.id.add_interested_city);
         localCityText=view.findViewById(R.id.local_city_text);
         localCityBtn=view.findViewById(R.id.change_local_city);
-
-
+        accountTv=view.findViewById(R.id.account_tx);
+        passwordEt=view.findViewById(R.id.password_et);
+        autoLogin=view.findViewById(R.id.auto_login);
+        maxItemTv=view.findViewById(R.id.max_item_tv);
+        itemAddBtn=view.findViewById(R.id.item_add_btn);
+        itemReduceBtn=view.findViewById(R.id.item_reduce_btn);
+        resetBtn=view.findViewById(R.id.reset_btn);
+        sp=new SPUtils(getContext(),"weather");
         WeatherViewModel weatherViewModel = new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
 
+        //初始 账号 密码 自动登录 修改密码
+        initAccount();
+        //初始化历史显示个数
+        initMaxItem();
 
         txList=initTxs();//下面的初始化方法
         RecyclerView recyclerView = view.findViewById(R.id.interested_city_recycler);//找到RecyclerView控件
@@ -182,12 +203,55 @@ public class SetupFragment extends Fragment {
             }
         });
     }
+    private void initAccount(){
+        String account=sp.getString("account");
+        String password=sp.getString("password");
+        boolean isLogin=sp.getBoolean("isLogin");
+        accountTv.setText(account);
+        passwordEt.setText(password);
+        if(isLogin){
+            autoLogin.setChecked(true);
+        }
+        autoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isLogin=sp.getBoolean("isLogin");
+                sp.putBoolean("isLogin",!isLogin);
+            }
+        });
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newPassword=passwordEt.getText().toString();
+                sp.putString("password",newPassword);
+            }
+        });
+    }
+    private void initMaxItem(){
+        int maxItem=sp.getInt("maxItem");
+        maxItemTv.setText(String.valueOf(maxItem));
+        itemAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int newMaxItem=Math.min(sp.getInt("maxItem")+1,10);
+                sp.putInt("maxItem",newMaxItem);
+                maxItemTv.setText(String.valueOf(newMaxItem));
+            }
+        });
+        itemReduceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int newMaxItem=Math.max(sp.getInt("maxItem")-1,4);
+                sp.putInt("maxItem",newMaxItem);
+                maxItemTv.setText(String.valueOf(newMaxItem));
+            }
+        });
+    }
     /**
      * 添加数据
      * @param view
      */
-    public void insertData(View view,String city)
-    {
+    public void insertData(View view,String city) {
 
         InterestedCity interestedCity=new InterestedCity();
         interestedCity.setInterestedCityName(city);

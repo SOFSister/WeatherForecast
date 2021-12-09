@@ -3,7 +3,9 @@ package com.example.weatherforecast;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -16,12 +18,15 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.example.weatherforecast.DB.AppDatabase;
+import com.example.weatherforecast.DB.InterestedCity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,7 +34,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.weatherforecast.databinding.ActivityMainBinding;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    private WeatherViewModel weatherViewModel;
+
+
+
 
     private ActivityMainBinding binding;
 
@@ -38,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        weatherViewModel=new ViewModelProvider(this,new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
         //隐藏actionbar
         this.getSupportActionBar().hide();
         //初始化底部按钮
@@ -53,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         //申请权限
         requestPower();
+        //初始化感兴趣城市
+        weatherViewModel.setInterestedCity(selectCityData(binding.getRoot()));
     }
     public void requestPower() {
     //判断是否已经赋予权限
@@ -92,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.CAMERA}, 1);
             }
         }
+    }
+    public List<InterestedCity> selectCityData(View view)
+    {
+        Toast.makeText(this,"查询成功",Toast.LENGTH_SHORT).show();
+        return AppDatabase.getInstance().interestedCityDao().loadAll();
     }
 
 }

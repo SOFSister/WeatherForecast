@@ -30,7 +30,7 @@ import com.example.weatherforecast.R;
 import com.example.weatherforecast.WeatherViewModel;
 
 public class MapFragment extends Fragment {
-
+    private WeatherViewModel weatherViewModel;
     private MapViewModel mViewModel;
     private MapView mMapView;
     private TextView mtextView;
@@ -48,6 +48,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.map_fragment, container, false);
+        weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
         //初始化地图
         //获取地图控件引用
         mMapView = view.findViewById(R.id.bmapView);
@@ -134,17 +135,13 @@ public class MapFragment extends Fragment {
             stringBuilder.append("\n街道：" + location.getStreet());
             stringBuilder.append("\n地址：" + location.getAddrStr());
             mtextView.setText(stringBuilder.toString());
-
-            Log.i("debug666","haha");
             //更新当前城市
             if(!nowCity.equals(location.getCity())){
                 nowCity=location.getCity();
-                WeatherViewModel weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
                 weatherViewModel.setCityEvent(location.getCity());
             }
             if(!nowCityMsg.equals(location.getProvince()+location.getCity()+location.getDistrict())){
                 nowCityMsg=location.getProvince()+location.getCity()+location.getDistrict();
-                WeatherViewModel weatherViewModel=new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
                 weatherViewModel.setCityMsgEvent(nowCityMsg);
             }
         }
