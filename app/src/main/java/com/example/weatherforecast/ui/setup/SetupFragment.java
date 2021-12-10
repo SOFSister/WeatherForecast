@@ -3,7 +3,6 @@ package com.example.weatherforecast.ui.setup;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -28,9 +26,10 @@ import com.example.weatherforecast.DB.InterestedCity;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.SPUtils;
 import com.example.weatherforecast.WeatherViewModel;
-import com.example.weatherforecast.queryWeather.QueryWeather;
 import com.example.weatherforecast.ui.setup.interestedcity.CityTx;
 import com.example.weatherforecast.ui.setup.interestedcity.CityTxAdapter;
+import com.example.weatherforecast.ui.weather.today.Tx;
+import com.example.weatherforecast.ui.weather.today.TxOtherCityAdapter;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
 import com.lljjcoder.bean.DistrictBean;
@@ -60,6 +59,7 @@ public class SetupFragment extends Fragment {
     private Button itemAddBtn;
     private Button itemReduceBtn;
     private Button resetBtn;
+    private WeatherViewModel weatherViewModel;
 
     public static SetupFragment newInstance() {
         return new SetupFragment();
@@ -80,25 +80,31 @@ public class SetupFragment extends Fragment {
         itemReduceBtn=view.findViewById(R.id.item_reduce_btn);
         resetBtn=view.findViewById(R.id.reset_btn);
         sp=new SPUtils(getContext(),"weather");
-        WeatherViewModel weatherViewModel = new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
+        weatherViewModel = new ViewModelProvider(getActivity(),new ViewModelProvider.NewInstanceFactory()).get(WeatherViewModel.class);
 
         //初始 账号 密码 自动登录 修改密码
         initAccount();
         //初始化历史显示个数
         initMaxItem();
 
-        txList=initTxs();//下面的初始化方法
-        RecyclerView recyclerView = view.findViewById(R.id.interested_city_recycler);//找到RecyclerView控件
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());//布局管理器
-        recyclerView.setLayoutManager(layoutManager);
-        CityTxAdapter adapter = new CityTxAdapter(txList);//适配器对象
-        recyclerView.setAdapter(adapter);//设置适配器为上面的对象*/
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-
         //初始化选择城市
         initChooseLocalCity();
         //初始化添加兴趣城市
         initAddInterestedCity();
+        //监听感兴趣城市的变化
+        weatherViewModel.getInterestedCity().observe(getViewLifecycleOwner(), new Observer<List<InterestedCity>>() {
+            @Override
+            public void onChanged(@Nullable List<InterestedCity> s) {
+                txList=initTxs(s);
+                RecyclerView recyclerView = view.findViewById(R.id.interested_city_recycler);//找到RecyclerView控件
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());//布局管理器
+                recyclerView.setLayoutManager(layoutManager);
+                CityTxAdapter adapter = new CityTxAdapter(txList);//适配器对象
+                recyclerView.setAdapter(adapter);//设置适配器为上面的对象*/
+                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+            }
+        });
+
 
         //监听当前城市
         weatherViewModel.getCityMsgEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -120,22 +126,12 @@ public class SetupFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    private List<CityTx> initTxs(){
+    private List<CityTx> initTxs(List<InterestedCity> s){
         List<CityTx> txList = new ArrayList<>();
-        CityTx city1 = new CityTx("北京", R.drawable.interested);
-        txList.add(city1);
-
-        CityTx city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);
-
-        city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);city2 = new CityTx("重庆", R.drawable.interested);
-        txList.add(city2);
+        for(InterestedCity perCity:s){
+            CityTx city = new CityTx(perCity.getInterestedCityName(), R.drawable.interested);
+            txList.add(city);//加入到链表
+        }
         return txList;
     }
     private void initChooseLocalCity(){
@@ -170,6 +166,9 @@ public class SetupFragment extends Fragment {
             }
         });
     }
+    public List<InterestedCity> selectCityData(View view) {
+        return AppDatabase.getInstance().interestedCityDao().loadAll();
+    }
     private void initAddInterestedCity(){
         CityPickerView mPicker=new CityPickerView();
         mPicker.init(getContext());
@@ -187,7 +186,8 @@ public class SetupFragment extends Fragment {
                 String aim="";
                 aim=province.toString()+city.toString()+district.toString();
                 insertData(view,city.toString());
-                //localCityText.setText(aim);
+                List<InterestedCity> nowInterestedCity=selectCityData(view);
+                weatherViewModel.setInterestedCity(nowInterestedCity);
             }
 
             @Override
@@ -224,6 +224,7 @@ public class SetupFragment extends Fragment {
             public void onClick(View view) {
                 String newPassword=passwordEt.getText().toString();
                 sp.putString("password",newPassword);
+                Toast.makeText(getContext(),"修改成功",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -256,6 +257,6 @@ public class SetupFragment extends Fragment {
         InterestedCity interestedCity=new InterestedCity();
         interestedCity.setInterestedCityName(city);
         AppDatabase.getInstance().interestedCityDao().insertAll(interestedCity);
-        Toast.makeText(getContext(),"插入成功",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),"添加成功",Toast.LENGTH_SHORT).show();
     }
 }

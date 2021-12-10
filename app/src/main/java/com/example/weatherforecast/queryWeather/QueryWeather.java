@@ -2,11 +2,13 @@ package com.example.weatherforecast.queryWeather;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.example.weatherforecast.DB.InterestedCity;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.ui.weather.today.TodayWeatherFragment;
 import com.google.gson.Gson;
@@ -15,6 +17,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -34,7 +38,6 @@ public class QueryWeather {
         return null;
     }
     public static void queryWeather(String city){
-        Log.d("debug666","111");
         final Weather[] cityWeather = new Weather[1];
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS).readTimeout(10,TimeUnit.SECONDS)
                 .writeTimeout(10,TimeUnit.SECONDS).build();
@@ -62,5 +65,40 @@ public class QueryWeather {
                 TodayWeatherFragment.handler.sendMessage(msg);
             }
         });
+    }
+    public static void queryWeathers(List<InterestedCity> cities){
+        final List<Weather> cityWeather=new ArrayList<>();
+        final int[] querySuccessCnt = {0};
+        for(InterestedCity perCity:cities){
+            OkHttpClient okHttpClient = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS).readTimeout(10,TimeUnit.SECONDS)
+                    .writeTimeout(10,TimeUnit.SECONDS).build();
+            Request request=new Request.Builder()
+                    .url("http://wthrcdn.etouch.cn/weather_mini?city="+perCity.interestedCityName)
+                    .build();
+            Call call=okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.d("https","fail");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    String jsonStr=response.body().string();
+                    cityWeather.add(handleWeatherResponse(jsonStr));
+                    querySuccessCnt[0] +=1;
+                }
+            });
+        }
+        while(querySuccessCnt[0] !=cities.size());
+        Weathers weathers=new Weathers(cityWeather);
+        Message msg=Message.obtain();
+        msg.what=2;
+        // 实例化一个Bundle
+        Bundle bundle = new Bundle();
+        // 把Persion数据放入到bundle中
+        bundle.putSerializable("weathers", weathers);
+        msg.setData(bundle);
+        TodayWeatherFragment.handler.sendMessage(msg);
     }
 }

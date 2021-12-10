@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -37,6 +38,7 @@ import com.example.weatherforecast.WeatherViewModel;
 import com.example.weatherforecast.queryWeather.Forecast;
 import com.example.weatherforecast.queryWeather.QueryWeather;
 import com.example.weatherforecast.queryWeather.Weather;
+import com.example.weatherforecast.queryWeather.Weathers;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -46,20 +48,24 @@ import java.util.List;
 
 public class TodayWeatherFragment extends Fragment {
     private static List<Tx> txList = new ArrayList<>();//一个全局的链表 详细天气
-    private List<Tx> otherCityList = new ArrayList<>();//一个全局的链表 其他城市信息
+    private static List<Tx> otherCityList = new ArrayList<>();//一个全局的链表 其他城市信息
     private View view;
     private static RecyclerView recyclerView;
     private static TextView titleNowCity;
     private static LinearLayoutManager layoutManager;
+    private static RecyclerView recyclerOtherCityView;
+    private static LinearLayoutManager layoutOtherCityManager;
+    private static Context context;
+    public static List<Weather>cityWeathers;
 
     private TodayWeatherViewModel mViewModel;
     public static Handler handler=new Handler(Looper.getMainLooper()){
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void handleMessage(android.os.Message msg){
+            Bundle bundle = msg.getData();
             switch (msg.what){
                 case 1:
-                    Bundle bundle = msg.getData();
                     Weather cityWeather = (Weather) bundle.getSerializable("weather");
                     Forecast todayWeather=cityWeather.getData().getForecast().get(0);
                     String hasText=titleNowCity.getText().toString();
@@ -69,6 +75,15 @@ public class TodayWeatherFragment extends Fragment {
                     recyclerView.setLayoutManager(layoutManager);
                     TxAdapter adapter = new TxAdapter(txList);//适配器对象
                     recyclerView.setAdapter(adapter);//设置适配器为上面的对象
+                    break;
+                case 2:
+                    Weathers weathers= (Weathers) bundle.getSerializable("weathers");
+                    cityWeathers=weathers.getWeathers();
+                    otherCityList=initOtherCityTxs(cityWeathers);
+                    recyclerOtherCityView.setLayoutManager(layoutOtherCityManager);
+                    TxOtherCityAdapter adapterOtherCity = new TxOtherCityAdapter(otherCityList);//适配器对象
+                    recyclerOtherCityView.setAdapter(adapterOtherCity);//设置适配器为上面的对象
+                    recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
                     break;
             }
         }
@@ -85,6 +100,9 @@ public class TodayWeatherFragment extends Fragment {
         view=inflater.inflate(R.layout.today_weather_fragment, container, false);
         recyclerView = view.findViewById(R.id.recycler);//找到RecyclerView控件
         layoutManager = new LinearLayoutManager(getContext());//布局管理器
+        recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
+        layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
+        context=getContext();
         //其他城市
 
         //初始化变量
@@ -105,13 +123,14 @@ public class TodayWeatherFragment extends Fragment {
         weatherViewModel.getInterestedCity().observe(getViewLifecycleOwner(), new Observer<List<InterestedCity>>() {
             @Override
             public void onChanged(@Nullable List<InterestedCity> s) {
-                otherCityList=initOtherCityTxs(s);
+                QueryWeather.queryWeathers(s);
+                /*otherCityList=initOtherCityTxs(s);
                 RecyclerView recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
                 LinearLayoutManager layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
                 recyclerOtherCityView.setLayoutManager(layoutOtherCityManager);
                 TxOtherCityAdapter adapterOtherCity = new TxOtherCityAdapter(otherCityList);//适配器对象
                 recyclerOtherCityView.setAdapter(adapterOtherCity);//设置适配器为上面的对象
-                recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+                recyclerOtherCityView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));*/
             }
         });
         return view;
@@ -141,12 +160,26 @@ public class TodayWeatherFragment extends Fragment {
         txList.add(windForce);//加入到链表
         return txList;
     }
-    private List<Tx> initOtherCityTxs(List<InterestedCity> s){
+    /*private List<Tx> initOtherCityTxs(List<InterestedCity> s){
         List<Tx> txList = new ArrayList<>();
         for(InterestedCity perCity:s){
             Tx city = new Tx(perCity.getInterestedCityName(),"晴8/-5°", R.drawable.city);
             txList.add(city);//加入到链表
         }
         return txList;
+    }*/
+    private static List<Tx> initOtherCityTxs(List<Weather> cityWeathers){
+        List<Tx> txList = new ArrayList<>();
+        for(Weather weather:cityWeathers){
+            Forecast todayWeather=weather.getData().getForecast().get(0);
+            Tx city = new Tx(weather.getData().getCity(),todayWeather.getHigh().substring(3)+"/"+todayWeather.getLow().substring(3), R.drawable.city);
+            txList.add(city);//加入到链表
+        }
+        /*for(InterestedCity perCity:s){
+            Tx city = new Tx(perCity.getInterestedCityName(),"晴8/-5°", R.drawable.city);
+            txList.add(city);//加入到链表
+        }*/
+        return txList;
     }
+
 }

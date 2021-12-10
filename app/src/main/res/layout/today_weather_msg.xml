@@ -17,7 +17,7 @@
     <TextView
 
         android:id="@+id/tx_name"
-        android:layout_width="130dp"
+        android:layout_width="100dp"
         android:textSize="15dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
 
         android:id="@+id/tx_msg"
         android:gravity="right"
-        android:layout_width="130dp"
+        android:layout_width="100dp"
         android:textSize="15dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public List<InterestedCity> selectCityData(View view)
     {
-        Toast.makeText(this,"查询成功",Toast.LENGTH_SHORT).show();
         return AppDatabase.getInstance().interestedCityDao().loadAll();
     }
 

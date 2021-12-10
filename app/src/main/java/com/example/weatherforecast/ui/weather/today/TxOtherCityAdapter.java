@@ -2,6 +2,7 @@ package com.example.weatherforecast.ui.weather.today;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherforecast.R;
+import com.example.weatherforecast.queryWeather.Forecast;
+import com.example.weatherforecast.queryWeather.Weather;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +61,7 @@ public class TxOtherCityAdapter extends RecyclerView.Adapter<TxOtherCityAdapter.
         final ViewHolder holder = new ViewHolder(view);
         holder.txView.setOnClickListener(new View.OnClickListener() {
             //这里是子项的点击事件，RecyclerView的特点就是可以对子项里面单个控件注册监听，这也是为什么RecyclerView要摒弃ListView的setOnItemClickListener方法的原因
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 Tx tx = mTxList.get(holder.getAdapterPosition());
@@ -62,7 +69,7 @@ public class TxOtherCityAdapter extends RecyclerView.Adapter<TxOtherCityAdapter.
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
                 View view = View.inflate(v.getContext(), R.layout.other_city_main, null);
                 List<Tx> txList = new ArrayList<>();
-                txList=initTxs();
+                txList=initTxs(TodayWeatherFragment.cityWeathers,tx.getName());
                 RecyclerView recyclerView = view.findViewById(R.id.recycler);//找到RecyclerView控件
                 LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext());//布局管理器
                 recyclerView.setLayoutManager(layoutManager);
@@ -79,17 +86,28 @@ public class TxOtherCityAdapter extends RecyclerView.Adapter<TxOtherCityAdapter.
         });
         return holder;//返回一个holder对象，给下个方法使用
     }
-    private List<Tx> initTxs(){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private List<Tx> initTxs(List<Weather>cityWeathers, String aimCity){
+        Forecast todayWeather=null;
+        for(Weather weather:cityWeathers){
+            if(weather.getData().getCity().equals(aimCity)){
+                todayWeather=weather.getData().getForecast().get(0);
+                break;
+            }
+        }
         List<Tx> txList = new ArrayList<>();
-        Tx weather = new Tx("天气","晴", R.drawable.weather);
+        Tx weather = new Tx("天气",todayWeather.getType(), R.drawable.weather);
         txList.add(weather);//加入到链表
-        Tx temperature = new Tx("温度","15/5°", R.drawable.temperature);
+        Tx temperature = new Tx("温度",todayWeather.getHigh().substring(3)+"/"+todayWeather.getLow().substring(3), R.drawable.temperature);
         txList.add(temperature);//加入到链表
-        Tx calendar = new Tx("日期","2021/12/6", R.drawable.calendar);
+        LocalDate date = LocalDate.now(); // get the current date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        //Tx calendar = new Tx("日期", todayWeather.getDate(), R.drawable.calendar);
+        Tx calendar = new Tx("日期", date.format(formatter), R.drawable.calendar);
         txList.add(calendar);//加入到链表
-        Tx windDirection = new Tx("风向","西北风", R.drawable.winddirection);
+        Tx windDirection = new Tx("风向", todayWeather.getFengxiang(), R.drawable.winddirection);
         txList.add(windDirection);//加入到链表
-        Tx windForce = new Tx("风速","3级", R.drawable.windforce);
+        Tx windForce = new Tx("风速", todayWeather.getFengli().substring(9,11), R.drawable.windforce);
         txList.add(windForce);//加入到链表
         return txList;
     }
