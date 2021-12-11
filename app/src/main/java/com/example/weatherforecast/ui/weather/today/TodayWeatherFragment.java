@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -57,6 +58,7 @@ public class TodayWeatherFragment extends Fragment {
     private static LinearLayoutManager layoutOtherCityManager;
     private static Context context;
     public static List<Weather>cityWeathers;
+    private ImageView cityImg;
 
     private TodayWeatherViewModel mViewModel;
     public static Handler handler=new Handler(Looper.getMainLooper()){
@@ -102,6 +104,7 @@ public class TodayWeatherFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());//布局管理器
         recyclerOtherCityView = view.findViewById(R.id.other_city_recycler);//找到RecyclerView控件
         layoutOtherCityManager = new LinearLayoutManager(getContext());//布局管理器
+        cityImg=view.findViewById(R.id.city_img);
         context=getContext();
         //其他城市
 
@@ -116,6 +119,10 @@ public class TodayWeatherFragment extends Fragment {
             public void onChanged(@Nullable String s) {
                 //查询天气
                 titleNowCity.setText(s);
+                if (s.equals("杭州市"))
+                    cityImg.setBackgroundResource(R.drawable.hangzhou);
+                else
+                    cityImg.setBackgroundResource(R.drawable.othercity);
                 QueryWeather.queryWeather(s);
             }
         });

@@ -28,6 +28,7 @@
                 tools:ignore="MissingConstraints">
 
                 <ImageView
+                    android:id="@+id/city_img"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_width="360dp"

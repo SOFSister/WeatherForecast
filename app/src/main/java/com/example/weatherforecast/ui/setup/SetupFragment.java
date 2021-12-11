@@ -3,6 +3,7 @@ package com.example.weatherforecast.ui.setup;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +23,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.example.weatherforecast.DB.AppDatabase;
 import com.example.weatherforecast.DB.InterestedCity;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.SPUtils;
 import com.example.weatherforecast.WeatherViewModel;
+import com.example.weatherforecast.notification.AddNotification;
+import com.example.weatherforecast.ui.map.MapFragment;
 import com.example.weatherforecast.ui.setup.interestedcity.CityTx;
 import com.example.weatherforecast.ui.setup.interestedcity.CityTxAdapter;
 import com.example.weatherforecast.ui.weather.today.Tx;
@@ -151,6 +167,10 @@ public class SetupFragment extends Fragment {
                 String aim="";
                 aim=province.toString()+city.toString()+district.toString();
                 localCityText.setText(aim);
+                MapFragment.nowCity=city.toString();
+                MapFragment.nowCityMsg=aim;
+                AddNotification.showCityChanged(getResources(),getContext(),"洋洋天气","您的默认位置已更改为"+aim);
+                MapFragment.flag=true;
             }
 
             @Override
@@ -166,6 +186,7 @@ public class SetupFragment extends Fragment {
             }
         });
     }
+
     public List<InterestedCity> selectCityData(View view) {
         return AppDatabase.getInstance().interestedCityDao().loadAll();
     }
