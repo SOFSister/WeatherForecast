@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.weatherforecast.DB.AppDatabase;
 import com.example.weatherforecast.DB.InterestedCity;
+import com.example.weatherforecast.DB.WeatherHistory;
 import com.example.weatherforecast.MainActivity;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.WeatherViewModel;
@@ -43,6 +44,7 @@ import com.example.weatherforecast.queryWeather.Weathers;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ import java.util.List;
 public class TodayWeatherFragment extends Fragment {
     private static List<Tx> txList = new ArrayList<>();//一个全局的链表 详细天气
     private static List<Tx> otherCityList = new ArrayList<>();//一个全局的链表 其他城市信息
-    private View view;
+    private static View view;
     private static RecyclerView recyclerView;
     private static TextView titleNowCity;
     private static LinearLayoutManager layoutManager;
@@ -71,7 +73,9 @@ public class TodayWeatherFragment extends Fragment {
                     Weather cityWeather = (Weather) bundle.getSerializable("weather");
                     Forecast todayWeather=cityWeather.getData().getForecast().get(0);
                     String hasText=titleNowCity.getText().toString();
-                    titleNowCity.setText(hasText+"  "+todayWeather.getHigh().substring(3)+"/"+todayWeather.getLow().substring(3));
+                    titleNowCity.setText(hasText+"  "+todayWeather.getHigh().substring(3,todayWeather.getHigh().length()-1)+"/"+todayWeather.getLow().substring(3));
+                    //添加到历史数据库
+                    insertHistoryData(view,hasText,todayWeather);
 
                     txList=initTxs(todayWeather);//下面的初始化方法
                     recyclerView.setLayoutManager(layoutManager);
@@ -90,7 +94,26 @@ public class TodayWeatherFragment extends Fragment {
             }
         }
     };
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void insertHistoryData(View view, String city, Forecast todayWeather) {
+        WeatherHistory weatherHistory=new WeatherHistory();
+        LocalDate date = LocalDate.now(); // get the current date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Log.i("insert","over5555");
+        if(AppDatabase.getInstance().weatherHistoryDao().findHasHistory(city,date.format(formatter)).size()!=0)
+            return;
+        int high= Integer.parseInt(todayWeather.getHigh().substring(3,todayWeather.getHigh().length()-1));
+        int low= Integer.parseInt(todayWeather.getLow().substring(3,todayWeather.getLow().length()-1));
+        LocalTime time = LocalTime.now(); // get the current time
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        weatherHistory.setHigh(high);
+        weatherHistory.setLow(low);
+        weatherHistory.setCityName(city);
+        weatherHistory.setDate(date.format(formatter));
+        weatherHistory.setTime(time.format(timeFormatter));
+        AppDatabase.getInstance().weatherHistoryDao().insertAll(weatherHistory);
+        Log.i("insert","over6666");
+    }
     public static TodayWeatherFragment newInstance() {
         return new TodayWeatherFragment();
     }

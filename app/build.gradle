@@ -56,4 +56,5 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
 }
